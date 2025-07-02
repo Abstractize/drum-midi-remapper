@@ -27,7 +27,7 @@ jobs:
         run: dotnet build --configuration Release -warnaserror
 
       - name: Run unit tests
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test --configuration Release --verbosity normal
 
       - name: Validate mapping JSON files
         run: |
