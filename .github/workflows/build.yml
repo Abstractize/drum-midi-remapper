@@ -3,33 +3,51 @@ name: Build and Publish Artifacts
 on:
   push:
     branches: [ main ]
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                runtime: [win-x64, osx-x64, osx-arm64, linux-x64]
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        runtime: [win-x64, osx-x64, osx-arm64, linux-x64]
 
-        steps:
-          - name: Checkout repository
-            uses: actions/checkout@v3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-          - name: Setup .NET 9 SDK
-            uses: actions/setup-dotnet@v3
-            with:
-                dotnet-version: '9.0.x'
+      - name: Setup .NET 9 SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0.x'
 
-          - name: Restore dependencies
-            run: dotnet restore
+      - name: Restore dependencies
+        run: dotnet restore
 
-          - name: Publish single-file executable for ${{ matrix.runtime }}
-            run: |
-                dotnet publish src/CLI -c Release -r ${{ matrix.runtime }} --self-contained true /p:PublishSingleFile=true /p:IncludeAllContentForSelfExtract=true -o ./publish/${{ matrix.runtime }}
+      - name: Publish single-file executable for ${{ matrix.runtime }}
+        run: |
+          dotnet publish src/CLI \
+            -c Release \
+            -r ${{ matrix.runtime }} \
+            --self-contained true \
+            /p:PublishSingleFile=true \
+            /p:IncludeAllContentForSelfExtract=true \
+            -o ./publish/${{ matrix.runtime }}
 
-          - name: Upload artifact for ${{ matrix.runtime }}
-            uses: actions/upload-artifact@v4
-            with:
-                name: DrumMidiRemapper-${{ matrix.runtime }}
-                path: ./publish/${{ matrix.runtime }}
-                
+      - name: Upload artifact for ${{ matrix.runtime }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: DrumMidiRemapper-${{ matrix.runtime }}
+          path: ./publish/${{ matrix.runtime }}
+
+      - name: Upload Release Asset
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./publish/${{ matrix.runtime }}/CLI*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
