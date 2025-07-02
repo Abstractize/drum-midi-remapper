@@ -1,0 +1,14 @@
+{
+    "name": "LogicPro",
+    "mapping": {
+        "Kick": 36,
+        "Snare": 38,
+        "HiHatClosed": 42,
+        "HiHatOpen": 46,
+        "TomLow": 43,
+        "TomMid": 47,
+        "TomHigh": 50,
+        "Crash": 57,
+        "Ride": 59
+    }
+}

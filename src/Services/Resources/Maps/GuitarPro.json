@@ -1,0 +1,14 @@
+{
+    "name": "GuitarPro",
+    "mapping": {
+        "Kick": 35,
+        "Snare": 40,
+        "HiHatClosed": 42,
+        "HiHatOpen": 46,
+        "TomLow": 43,
+        "TomMid": 47,
+        "TomHigh": 50,
+        "Crash": 49,
+        "Ride": 51
+    }
+}
