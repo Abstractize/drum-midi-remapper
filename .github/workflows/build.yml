@@ -28,7 +28,7 @@ jobs:
           dotnet publish src/CLI -c Release -r ${{ matrix.runtime }} --self-contained true /p:PublishSingleFile=true /p:IncludeAllContentForSelfExtract=true -o ./publish/${{ matrix.runtime }}
 
       - name: Upload artifact for ${{ matrix.runtime }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: DrumMidiRemapper-${{ matrix.runtime }}
           path: ./publish/${{ matrix.runtime }}
