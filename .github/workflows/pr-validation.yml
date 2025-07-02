@@ -4,9 +4,8 @@ on:
   pull_request:
 
 jobs:
-  build-and-test:
-    name: Build and Test
-
+  build-and-validate:
+    name: Build, Test & Validate
     runs-on: ubuntu-latest
 
     steps:
@@ -21,8 +20,21 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build the solution
-        run: dotnet build --configuration Release --no-restore
+      - name: Check code formatting
+        run: dotnet format --verify-no-changes
+
+      - name: Build with analyzers
+        run: dotnet build --configuration Release -warnaserror
 
       - name: Run unit tests
         run: dotnet test --no-build --verbosity normal
+
+      - name: Validate mapping JSON files
+        run: |
+          for file in $(find . -name "*.json"); do
+            echo "Validating $file"
+            jq empty "$file"
+          done
+
+      - name: Check for vulnerable packages
+        run: dotnet list package --vulnerable
