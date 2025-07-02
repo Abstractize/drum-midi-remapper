@@ -1,0 +1,58 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-release:
+    name: Build and Release Binaries
+
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            rid: win-x64
+            ext: .exe
+          - os: macos-latest
+            rid: osx-x64
+            ext: ''
+          - os: macos-latest
+            rid: osx-arm64
+            ext: ''
+          - os: ubuntu-latest
+            rid: linux-x64
+            ext: ''
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Publish single-file binary
+        run: |
+          dotnet publish src/CLI \
+            -c Release \
+            -r ${{ matrix.rid }} \
+            --self-contained true \
+            /p:PublishSingleFile=true \
+            /p:IncludeAllContentForSelfExtract=true \
+            -o publish
+
+      - name: Rename binary
+        run: |
+          mv publish/CLI${{ matrix.ext }} publish/DrumMidiRemapper-${{ matrix.rid }}${{ matrix.ext }}
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: publish/DrumMidiRemapper-${{ matrix.rid }}${{ matrix.ext }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
