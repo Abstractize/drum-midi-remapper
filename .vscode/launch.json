@@ -10,6 +10,16 @@
             "request": "attach"
         },
         {
+            "name": ".NET MAUI MacCatalyst Launch",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/GUI/bin/Debug/net9.0-maccatalyst/maccatalyst-arm64/GUI.app/Contents/MacOS/GUI",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/GUI",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
+        {
             "name": ".NET Core Launch (console)",
             "type": "coreclr",
             "request": "launch",

@@ -1,0 +1,34 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GUI.MainPage"
+             Title="Drum MIDI Remapper">
+
+        <VerticalStackLayout Spacing="20"
+                             Padding="30">
+
+                <Label Text="Select MIDI file:"
+                       FontAttributes="Bold"/>
+                <Button Text="Browse MIDI File"
+                        Clicked="OnBrowseFileClicked"/>
+
+                <Label x:Name="SelectedFileLabel"
+                       Text="No file selected"
+                       TextColor="Gray"/>
+
+                <Label Text="Source Map:"
+                       FontAttributes="Bold"/>
+                <Picker x:Name="SourceMapPicker"/>
+
+                <Label Text="Target Map:"
+                       FontAttributes="Bold"/>
+                <Picker x:Name="TargetMapPicker"/>
+
+                <Button Text="Remap MIDI"
+                        Clicked="OnRemapClicked"/>
+
+                <Label x:Name="ResultLabel"
+                       Text=""
+                       TextColor="Green"/>
+
+        </VerticalStackLayout>
+</ContentPage>
