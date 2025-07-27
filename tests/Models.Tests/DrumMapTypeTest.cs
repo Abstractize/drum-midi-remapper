@@ -5,30 +5,30 @@ public class DrumMapTypeTest
     [Fact]
     public void DrumMapType_ContainsExpectedValues()
     {
-        Assert.Equal(0, (int)DrumMapType.StevenSlate);
-        Assert.Equal(1, (int)DrumMapType.GuitarPro);
-        Assert.Equal(2, (int)DrumMapType.LogicPro);
-        Assert.Equal(3, (int)DrumMapType.ProTools);
+        Assert.Equal(0, (int)DrumMapTypes.StevenSlate);
+        Assert.Equal(1, (int)DrumMapTypes.GuitarPro);
+        Assert.Equal(2, (int)DrumMapTypes.LogicPro);
+        Assert.Equal(3, (int)DrumMapTypes.ProTools);
     }
 
     [Theory]
-    [InlineData(DrumMapType.StevenSlate)]
-    [InlineData(DrumMapType.GuitarPro)]
-    [InlineData(DrumMapType.LogicPro)]
-    [InlineData(DrumMapType.ProTools)]
-    public void DrumMapType_IsDefined(DrumMapType type)
+    [InlineData(DrumMapTypes.StevenSlate)]
+    [InlineData(DrumMapTypes.GuitarPro)]
+    [InlineData(DrumMapTypes.LogicPro)]
+    [InlineData(DrumMapTypes.ProTools)]
+    public void DrumMapType_IsDefined(DrumMapTypes type)
     {
         Assert.True(Enum.IsDefined(type));
     }
 
     [Theory]
-    [InlineData("StevenSlate", DrumMapType.StevenSlate)]
-    [InlineData("GuitarPro", DrumMapType.GuitarPro)]
-    [InlineData("LogicPro", DrumMapType.LogicPro)]
-    [InlineData("ProTools", DrumMapType.ProTools)]
-    public void DrumMapType_ParseString_ReturnsCorrectEnum(string name, DrumMapType expected)
+    [InlineData("StevenSlate", DrumMapTypes.StevenSlate)]
+    [InlineData("GuitarPro", DrumMapTypes.GuitarPro)]
+    [InlineData("LogicPro", DrumMapTypes.LogicPro)]
+    [InlineData("ProTools", DrumMapTypes.ProTools)]
+    public void DrumMapType_ParseString_ReturnsCorrectEnum(string name, DrumMapTypes expected)
     {
-        var parsed = (DrumMapType)Enum.Parse(typeof(DrumMapType), name);
+        var parsed = (DrumMapTypes)Enum.Parse(typeof(DrumMapTypes), name);
         Assert.Equal(expected, parsed);
     }
 }

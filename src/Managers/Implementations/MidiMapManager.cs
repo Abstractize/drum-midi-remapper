@@ -9,11 +9,18 @@ public class MidiMapManager(IMapLoaderService mapLoader, IMidiFileService midiFi
     private readonly IMapLoaderService _mapLoader = mapLoader;
     private readonly IMidiFileService _midiFileService = midiFileService;
 
-    public async Task RemapMidi(RemapVariables variables)
+    public async Task<string> RemapMidi(string sourceMapArg, string targetMapArg, string midiPath)
     {
-        DrumMap sourceMap = await _mapLoader.LoadAsync(variables.SourceMapType);
-        DrumMap targetMap = await _mapLoader.LoadAsync(variables.TargetMapType);
+        if (!Enum.TryParse<DrumMapTypes>(sourceMapArg, true, out var sourceMapType))
+            throw new ArgumentException($"Invalid source map: '{sourceMapArg}'");
 
-        await _midiFileService.RemapAsync(sourceMap, targetMap, variables.MidiPath);
+
+        if (!Enum.TryParse<DrumMapTypes>(targetMapArg, true, out var targetMapType))
+            throw new ArgumentException($"Invalid target map: '{targetMapArg}'");
+
+        DrumMap sourceMap = await _mapLoader.LoadAsync(sourceMapType);
+        DrumMap targetMap = await _mapLoader.LoadAsync(targetMapType);
+
+        return await _midiFileService.RemapAsync(sourceMap, targetMap, midiPath);
     }
 }

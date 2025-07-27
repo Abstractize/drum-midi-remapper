@@ -12,8 +12,8 @@ namespace Managers.Tests.Implementations
 
             var result = await manager.Execute(args);
 
-            Assert.Equal(DrumMapType.GuitarPro, result.SourceMapType);
-            Assert.Equal(DrumMapType.LogicPro, result.TargetMapType);
+            Assert.Equal(DrumMapTypes.GuitarPro.ToString(), result.SourceMapType);
+            Assert.Equal(DrumMapTypes.LogicPro.ToString(), result.TargetMapType);
             Assert.Equal("test.mid", result.MidiPath);
         }
 

@@ -25,7 +25,7 @@ internal class Program
         {
             Models.RemapVariables variables = await argumentManager.Execute(args);
 
-            await manager.RemapMidi(variables);
+            await manager.RemapMidi(variables.SourceMapType, variables.TargetMapType, variables.MidiPath);
             Console.WriteLine(SUCCESS_MESSAGE);
         }
         catch (Exception ex)

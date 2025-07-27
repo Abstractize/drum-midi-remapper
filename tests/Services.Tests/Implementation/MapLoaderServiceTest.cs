@@ -12,7 +12,7 @@ public class MapLoaderServiceTest
     public async Task LoadAsync_ValidType_ReturnsDrumMap()
     {
         // Arrange
-        var type = DrumMapType.ProTools;
+        var type = DrumMapTypes.ProTools;
         var resourceName = $"Services.Resources.Maps.{type}.json";
         var drumMap = new DrumMap { Name = "TestMap" };
         var json = JsonSerializer.Serialize(drumMap);
@@ -35,7 +35,7 @@ public class MapLoaderServiceTest
     public async Task LoadAsync_ResourceNotFound_ThrowsFileNotFoundException()
     {
         // Arrange
-        var type = DrumMapType.GuitarPro;
+        var type = DrumMapTypes.GuitarPro;
         var resourceName = $"Services.Resources.Maps.{type}.json";
         var assemblyMock = new Mock<Assembly>();
         assemblyMock.Setup(a => a.GetManifestResourceStream(resourceName)).Returns((Stream?)null);
@@ -50,7 +50,7 @@ public class MapLoaderServiceTest
     public async Task LoadAsync_InvalidJson_ThrowsException()
     {
         // Arrange
-        var type = DrumMapType.LogicPro;
+        var type = DrumMapTypes.LogicPro;
         var resourceName = $"Services.Resources.Maps.{type}.json";
         var invalidJson = "{ invalid json }";
         var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(invalidJson));
@@ -73,7 +73,7 @@ public class MapLoaderServiceTest
             _testAssembly = testAssembly;
         }
 
-        public new async Task<DrumMap> LoadAsync(DrumMapType type)
+        public new async Task<DrumMap> LoadAsync(DrumMapTypes type)
         {
             var resourceName = $"Services.Resources.Maps.{type}.json";
             using Stream? stream = _testAssembly.GetManifestResourceStream(resourceName) ??

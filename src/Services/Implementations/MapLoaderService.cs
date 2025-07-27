@@ -9,7 +9,7 @@ public class MapLoaderService : IMapLoaderService
 {
     private readonly Assembly _assembly = Assembly.GetExecutingAssembly();
 
-    public async Task<DrumMap> LoadAsync(DrumMapType type)
+    public async Task<DrumMap> LoadAsync(DrumMapTypes type)
     {
         var resourceName = $"Services.Resources.Maps.{type}.json";
 

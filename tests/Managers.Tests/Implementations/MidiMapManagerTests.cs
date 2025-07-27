@@ -6,8 +6,8 @@ namespace Managers.Tests.Implementations;
 
 public class MidiMapManagerTest
 {
-    private const DrumMapType SOURCE = DrumMapType.GuitarPro;
-    private const DrumMapType TARGET = DrumMapType.StevenSlate;
+    private const DrumMapTypes SOURCE = DrumMapTypes.GuitarPro;
+    private const DrumMapTypes TARGET = DrumMapTypes.StevenSlate;
     private const string FILENAME = "test.mid";
 
     [Fact]
@@ -22,8 +22,8 @@ public class MidiMapManagerTest
 
         var variables = new RemapVariables
         {
-            SourceMapType = SOURCE,
-            TargetMapType = TARGET,
+            SourceMapType = SOURCE.ToString(),
+            TargetMapType = TARGET.ToString(),
             MidiPath = FILENAME
         };
 
@@ -33,7 +33,11 @@ public class MidiMapManagerTest
         var manager = new MidiMapManager(mockMapLoader.Object, mockMidiFileService.Object);
 
         // Act
-        await manager.RemapMidi(variables);
+        await manager.RemapMidi(
+            variables.SourceMapType,
+            variables.TargetMapType,
+            variables.MidiPath
+        );
 
         // Assert
         mockMapLoader.Verify(m => m.LoadAsync(SOURCE), Times.Once);

@@ -7,7 +7,7 @@ namespace Services.Implementations;
 
 public class MidiFileService : IMidiFileService
 {
-    public async Task RemapAsync(DrumMap sourceMap, DrumMap targetMap, string midiFilePath)
+    public async Task<string> RemapAsync(DrumMap sourceMap, DrumMap targetMap, string midiFilePath)
     {
         if (!File.Exists(midiFilePath))
             throw new FileNotFoundException($"MIDI file not found: {midiFilePath}");
@@ -22,6 +22,8 @@ public class MidiFileService : IMidiFileService
         await WriteMidiAsync(midiFile, outputPath);
 
         Console.WriteLine($"Remapped MIDI file saved at: {outputPath}");
+
+        return outputPath;
     }
 
     private static async Task<MidiFile> ReadMidiAsync(string path)

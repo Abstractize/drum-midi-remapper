@@ -7,13 +7,13 @@ public class RemapVariablesTest
     {
         var remapVariables = new RemapVariables
         {
-            SourceMapType = DrumMapType.GuitarPro,
-            TargetMapType = DrumMapType.LogicPro,
+            SourceMapType = DrumMapTypes.GuitarPro.ToString(),
+            TargetMapType = DrumMapTypes.LogicPro.ToString(),
             MidiPath = "test.mid"
         };
 
-        Assert.Equal(DrumMapType.GuitarPro, remapVariables.SourceMapType);
-        Assert.Equal(DrumMapType.LogicPro, remapVariables.TargetMapType);
+        Assert.Equal(DrumMapTypes.GuitarPro.ToString(), remapVariables.SourceMapType);
+        Assert.Equal(DrumMapTypes.LogicPro.ToString(), remapVariables.TargetMapType);
         Assert.Equal("test.mid", remapVariables.MidiPath);
     }
 
@@ -22,14 +22,14 @@ public class RemapVariablesTest
     {
         var remapVariables = new RemapVariables
         {
-            SourceMapType = DrumMapType.LogicPro,
-            TargetMapType = DrumMapType.GuitarPro,
+            SourceMapType = DrumMapTypes.LogicPro.ToString(),
+            TargetMapType = DrumMapTypes.GuitarPro.ToString(),
             MidiPath = "file.mid"
         };
 
-        remapVariables.SourceMapType = DrumMapType.GuitarPro;
+        remapVariables.SourceMapType = DrumMapTypes.GuitarPro.ToString();
 
-        Assert.Equal(DrumMapType.GuitarPro, remapVariables.SourceMapType);
+        Assert.Equal(DrumMapTypes.GuitarPro.ToString(), remapVariables.SourceMapType);
     }
 
     [Fact]
@@ -37,14 +37,14 @@ public class RemapVariablesTest
     {
         var remapVariables = new RemapVariables
         {
-            SourceMapType = DrumMapType.GuitarPro,
-            TargetMapType = DrumMapType.LogicPro,
+            SourceMapType = DrumMapTypes.GuitarPro.ToString(),
+            TargetMapType = DrumMapTypes.LogicPro.ToString(),
             MidiPath = "file.mid"
         };
 
-        remapVariables.TargetMapType = DrumMapType.GuitarPro;
+        remapVariables.TargetMapType = DrumMapTypes.GuitarPro.ToString();
 
-        Assert.Equal(DrumMapType.GuitarPro, remapVariables.TargetMapType);
+        Assert.Equal(DrumMapTypes.GuitarPro.ToString(), remapVariables.TargetMapType);
     }
 
     [Fact]
@@ -52,8 +52,8 @@ public class RemapVariablesTest
     {
         var remapVariables = new RemapVariables
         {
-            SourceMapType = DrumMapType.GuitarPro,
-            TargetMapType = DrumMapType.LogicPro,
+            SourceMapType = DrumMapTypes.GuitarPro.ToString(),
+            TargetMapType = DrumMapTypes.LogicPro.ToString(),
             MidiPath = "old.mid"
         };
 
