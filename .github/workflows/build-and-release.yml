@@ -1,0 +1,120 @@
+name: Build Drum Midi Remapper (Windows/macOS/Linux)
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  pull_request:
+    branches: [ main ]
+
+env:
+  VERSION: ${{ github.ref_name }}
+
+jobs:
+  build-windows:
+    name: Build Windows Desktop + CLI (${{ env.VERSION }})
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Install MAUI workloads
+        run: |
+          dotnet workload update
+          dotnet workload install maui
+          dotnet workload install maui-windows
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build Windows MSIX
+        run: |
+          dotnet publish ./GUI/GUI.csproj -f net9.0-windows10.0.19041.0 -c Release `
+            -p:Version=${{ env.VERSION }} `
+            -p:WindowsPackageType=MSIX `
+            -p:GenerateAppxPackageOnBuild=true
+
+      - name: Build CLI
+        run: dotnet publish ./CLI/CLI.csproj -c Release -r win-x64 --self-contained true -p:Version=${{ env.VERSION }} -o ./cli-publish
+
+      - name: Package Windows MSIX
+        shell: pwsh
+        run: |
+          $msix = Get-ChildItem -Path ./GUI/bin/Release/** -Recurse -Include "*.msix" | Select-Object -First 1
+          Compress-Archive -Path $msix.FullName -DestinationPath DrumMidiRemapper-Windows-${{ env.VERSION }}.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DrumMidiRemapper-Windows-${{ env.VERSION }}
+          path: |
+            DrumMidiRemapper-Windows-${{ env.VERSION }}.zip
+            ./cli-publish/**
+
+  build-macos:
+    name: Build macOS Desktop + CLI (${{ env.VERSION }})
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Install MAUI workloads
+        run: |
+          dotnet workload update
+          dotnet workload install maui
+          dotnet workload install maui-maccatalyst
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build MacCatalyst App
+        run: dotnet publish ./GUI/GUI.csproj -f net9.0-maccatalyst -c Release -p:Version=${{ env.VERSION }}
+
+      - name: Create DMG Installer
+        run: |
+          brew install create-dmg
+          APP_PATH=$(find ./GUI/bin/Release/net9.0-maccatalyst/maccatalyst/ -name "*.app" | head -n 1)
+          create-dmg \
+            --volname "Drum Midi Remapper" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --icon-size 100 \
+            --icon "$APP_PATH" 175 190 \
+            --app-drop-link 425 190 \
+            "DrumMidiRemapper-${{ env.VERSION }}.dmg" "$APP_PATH"
+
+      - name: Build CLI
+        run: dotnet publish ./CLI/CLI.csproj -c Release -r osx-x64 --self-contained true -p:Version=${{ env.VERSION }} -o ./cli-publish
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DrumMidiRemapper-macOS-${{ env.VERSION }}
+          path: |
+            DrumMidiRemapper-${{ env.VERSION }}.dmg
+            ./cli-publish/**
+
+  build-linux:
+    name: Build Linux CLI only (${{ env.VERSION }})
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build CLI Linux
+        run: dotnet publish ./CLI/CLI.csproj -c Release -r linux-x64 --self-contained true -p:Version=${{ env.VERSION }} -o ./cli-publish
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DrumMidiRemapper-LinuxCLI-${{ env.VERSION }}
+          path: ./cli-publish/**

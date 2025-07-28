@@ -15,29 +15,16 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "Launch API",
+            "name": "Launch GUI (Mac Catalyst)",
             "type": "coreclr",
             "request": "launch",
-            "program": "${workspaceFolder}/src/API/bin/Debug/net9.0/API",
-            "cwd": "${workspaceFolder}/src/API",
-            "launchBrowser": {
-                "enabled": true,
-                "args": "${auto-detect-url}",
-                "windows": {
-                    "command": "cmd.exe",
-                    "args": "/C start ${auto-detect-url}"
-                },
-                "osx": {
-                    "command": "open"
-                },
-                "linux": {
-                    "command": "xdg-open"
-                }
-            },
+            "preLaunchTask": "build GUI (Mac Catalyst)",
+            "program": "${workspaceFolder}/src/GUI/bin/Debug/net9.0-maccatalyst/maccatalyst-arm64/GUI.app/Contents/MacOS/GUI",
+            "cwd": "${workspaceFolder}/src/GUI",
+            "internalConsoleOptions": "openOnSessionStart",
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "console": "internalConsole"
+                "DOTNET_ROOT": "/usr/local/share/dotnet"
+            }
         }
     ]
 }

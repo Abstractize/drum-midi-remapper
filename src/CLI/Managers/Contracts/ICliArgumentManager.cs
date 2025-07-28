@@ -1,6 +1,6 @@
 using Models;
 
-namespace Managers.Contracts;
+namespace CLI.Managers.Contracts;
 
 public interface ICliArgumentManager
 {

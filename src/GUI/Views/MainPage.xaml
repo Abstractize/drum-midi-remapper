@@ -1,0 +1,83 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:GUI.ViewModels"
+             x:Class="GUI.Views.MainPage"
+             Title="Drum MIDI Remapper"
+             BackgroundColor="{DynamicResource Background}">
+
+        <ScrollView>
+                <VerticalStackLayout
+                        Padding="24"
+                        Spacing="20"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        WidthRequest="400"
+                        BackgroundColor="{DynamicResource CardBackground}"
+                        Margin="0">
+
+                        <!-- Source Map -->
+                        <StackLayout>
+                                <Label
+                                        Text="Source Map:"
+                                        TextColor="{DynamicResource TextColor}"
+                                        Margin="0,0,0,6"/>
+                                <Picker
+                                        ItemsSource="{Binding MapTypes}"
+                                        SelectedItem="{Binding SourceMap}"
+                                        BackgroundColor="{DynamicResource InputBackground}"
+                                        TextColor="{DynamicResource TextColor}"
+                                        HeightRequest="44"
+                                        Margin="0,0,0,12"/>
+                        </StackLayout>
+
+                        <!-- Target Map -->
+                        <StackLayout>
+                                <Label
+                                        Text="Target Map:"
+                                        TextColor="{DynamicResource TextColor}"
+                                        Margin="0,0,0,6"/>
+                                <Picker
+                                        ItemsSource="{Binding MapTypes}"
+                                        SelectedItem="{Binding TargetMap}"
+                                        BackgroundColor="{DynamicResource InputBackground}"
+                                        TextColor="{DynamicResource TextColor}"
+                                        HeightRequest="44"
+                                        Margin="0,0,0,12"/>
+                        </StackLayout>
+
+                        <!-- MIDI File Selection -->
+                        <StackLayout>
+                                <!-- Select MIDI File Button -->
+                                <Button
+                                        Text="Select MIDI File"
+                                        Command="{Binding PickFileCommand}"
+                                        BackgroundColor="{DynamicResource Primary}"
+                                        TextColor="White"
+                                        CornerRadius="8"
+                                        HeightRequest="44"
+                                        FontAttributes="Bold"/>
+
+                                <!-- Selected File Label -->
+                                <Label
+                                        Text="{Binding FileName}"
+                                        FontSize="12"
+                                        TextColor="{DynamicResource TextColor}"
+                                        LineBreakMode="CharacterWrap"
+                                        HorizontalOptions="Center"
+                                        Margin="0,8,0,12"/>
+
+                        </StackLayout>
+
+                        <!-- Remap & Save Button -->
+                        <Button
+                                Text="Remap &amp; Save"
+                                Command="{Binding RemapCommand}"
+                                IsEnabled="{Binding CanRemap}"
+                                BackgroundColor="{DynamicResource Primary}"
+                                TextColor="White"
+                                CornerRadius="8"
+                                HeightRequest="44"
+                                FontAttributes="Bold"/>
+                </VerticalStackLayout>
+        </ScrollView>
+</ContentPage>

@@ -2,6 +2,8 @@
 using Managers.Contracts;
 using Services;
 using Managers;
+using CLI.Managers;
+using CLI.Managers.Contracts;
 
 namespace CLI;
 
@@ -15,6 +17,7 @@ internal class Program
 
         services.AddServices();
         services.AddManagers();
+        services.AddCLIManagers();
 
         ServiceProvider provider = services.BuildServiceProvider();
 

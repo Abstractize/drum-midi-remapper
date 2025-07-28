@@ -11,7 +11,7 @@ namespace Services.Tests.Implementation
         [Fact]
         public async Task RemapAsync_FileDoesNotExist_ThrowsFileNotFoundException()
         {
-            var service = new MidiFileService();
+            var service = new MidiFileServiceDryWetMidi();
             var sourceMap = new DrumMap();
             var targetMap = new DrumMap();
             string fakePath = "nonexistent.mid";
@@ -25,7 +25,7 @@ namespace Services.Tests.Implementation
         public async Task RemapAsync_ValidFile_RemapsAndSavesFile()
         {
             // Arrange
-            var service = new MidiFileService();
+            var service = new MidiFileServiceDryWetMidi();
             var sourceMap = new DrumMap();
             var targetMap = new DrumMap();
             string tempFile = Path.GetTempFileName();

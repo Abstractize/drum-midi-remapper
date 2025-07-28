@@ -1,0 +1,17 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build GUI (Mac Catalyst)",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/GUI/GUI.csproj",
+                "-f",
+                "net9.0-maccatalyst"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

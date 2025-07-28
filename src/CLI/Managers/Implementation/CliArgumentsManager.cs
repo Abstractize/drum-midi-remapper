@@ -1,7 +1,7 @@
-using Managers.Contracts;
+using CLI.Managers.Contracts;
 using Models;
 
-namespace Managers.Implementations;
+namespace CLI.Managers.Implementations;
 
 public class CliArgumentManager : ICliArgumentManager
 {
