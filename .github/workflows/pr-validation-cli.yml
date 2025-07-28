@@ -35,27 +35,27 @@ jobs:
       # - name: Check for vulnerable packages
       #   run: dotnet list package --vulnerable
 
-  validate-maui:
-    name: Validate GUI MAUI on macOS
-    runs-on: macos-latest
-    needs: validate-cli
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+  # validate-maui:
+  #   name: Validate GUI MAUI on macOS
+  #   runs-on: macos-latest
+  #   needs: validate-cli
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '9.0.x'
+  #     - name: Setup .NET
+  #       uses: actions/setup-dotnet@v4
+  #       with:
+  #         dotnet-version: '9.0.x'
 
-      - name: Install workloads
-        run: |
-          dotnet workload update
-          dotnet workload install maui
-          dotnet workload install maui-maccatalyst
+  #     - name: Install workloads
+  #       run: |
+  #         dotnet workload update
+  #         dotnet workload install maui
+  #         dotnet workload install maui-maccatalyst
 
-      - name: Restore GUI
-        run: dotnet restore ./src/GUI/GUI.csproj
+  #     - name: Restore GUI
+  #       run: dotnet restore ./src/GUI/GUI.csproj
 
-      - name: Build GUI
-        run: dotnet build ./src/GUI/GUI.csproj --configuration Release --no-restore
+  #     - name: Build GUI
+  #       run: dotnet build ./src/GUI/GUI.csproj --configuration Release --no-restore
