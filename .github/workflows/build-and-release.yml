@@ -80,6 +80,10 @@ jobs:
         with:
           dotnet-version: 9.0.x
 
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '16.4'
+
       - name: Install MAUI workloads
         run: |
           dotnet workload update
@@ -126,10 +130,10 @@ jobs:
           dotnet-version: 9.0.x
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore ./src/CLI/CLI.csproj
 
       - name: Build CLI Linux
-        run: dotnet publish ./src/CLI/CLI.csproj -c Release -r linux-x64 --self-contained true -p:Version=${{ needs.version.outputs.version }} -o ./cli-publish
+        run: dotnet publish ./src/CLI/CLI.csproj -c Release -r linux-x64 --framework net9.0 --self-contained true -p:Version=${{ needs.version.outputs.version }} -o ./cli-publish --no-restore
 
       - uses: actions/upload-artifact@v4
         with:

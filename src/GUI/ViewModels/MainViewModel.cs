@@ -13,7 +13,7 @@ public partial class MainViewModel : ObservableObject
     public MainViewModel(IMidiMapManager midiManager)
     {
         _midiManager = midiManager;
-        MapTypes = Enum.GetValues<DrumMapTypes>().ToList();
+        MapTypes = [.. Enum.GetValues<DrumMapTypes>()];
     }
 
     [ObservableProperty]
