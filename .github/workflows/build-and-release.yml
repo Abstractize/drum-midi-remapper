@@ -7,12 +7,9 @@ on:
   pull_request:
     branches: [ main ]
 
-env:
-  VERSION: ${{ github.ref_name }}
-
 jobs:
   build-windows:
-    name: Build Windows Desktop + CLI (${{ env.VERSION }})
+    name: Build Windows Desktop + CLI (${{ github.ref_name }})
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,28 +30,28 @@ jobs:
       - name: Build Windows MSIX
         run: |
           dotnet publish ./src/GUI/GUI.csproj -f net9.0-windows10.0.19041.0 -c Release `
-            -p:Version=${{ env.VERSION }} `
+            -p:Version=${{ github.ref_name }} `
             -p:WindowsPackageType=MSIX `
             -p:GenerateAppxPackageOnBuild=true
 
       - name: Build CLI
-        run: dotnet publish ./src/CLI/CLI.csproj -c Release -r win-x64 --self-contained true -p:Version=${{ env.VERSION }} -o ./cli-publish
+        run: dotnet publish ./src/CLI/CLI.csproj -c Release -r win-x64 --self-contained true -p:Version=${{ github.ref_name }} -o ./cli-publish
 
       - name: Package Windows MSIX
         shell: pwsh
         run: |
           $msix = Get-ChildItem -Path ./src/GUI/bin/Release/** -Recurse -Include "*.msix" | Select-Object -First 1
-          Compress-Archive -Path $msix.FullName -DestinationPath DrumMidiRemapper-Windows-${{ env.VERSION }}.zip
+          Compress-Archive -Path $msix.FullName -DestinationPath DrumMidiRemapper-Windows-${{ github.ref_name }}.zip
 
       - uses: actions/upload-artifact@v4
         with:
-          name: DrumMidiRemapper-Windows-${{ env.VERSION }}
+          name: DrumMidiRemapper-Windows-${{ github.ref_name }}
           path: |
-            DrumMidiRemapper-Windows-${{ env.VERSION }}.zip
+            DrumMidiRemapper-Windows-${{ github.ref_name }}.zip
             ./cli-publish/**
 
   build-macos:
-    name: Build macOS Desktop + CLI (${{ env.VERSION }})
+    name: Build macOS Desktop + CLI (${{ github.ref_name }})
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -73,7 +70,7 @@ jobs:
         run: dotnet restore
 
       - name: Build MacCatalyst App
-        run: dotnet publish ./src/GUI/GUI.csproj -f net9.0-maccatalyst -c Release -p:Version=${{ env.VERSION }}
+        run: dotnet publish ./src/GUI/GUI.csproj -f net9.0-maccatalyst -c Release -p:Version=${{ github.ref_name }}
 
       - name: Create DMG Installer
         run: |
@@ -86,20 +83,20 @@ jobs:
             --icon-size 100 \
             --icon "$APP_PATH" 175 190 \
             --app-drop-link 425 190 \
-            "DrumMidiRemapper-${{ env.VERSION }}.dmg" "$APP_PATH"
+            "DrumMidiRemapper-${{ github.ref_name }}.dmg" "$APP_PATH"
 
       - name: Build CLI
-        run: dotnet publish ./src/CLI/CLI.csproj -c Release -r osx-x64 --self-contained true -p:Version=${{ env.VERSION }} -o ./cli-publish
+        run: dotnet publish ./src/CLI/CLI.csproj -c Release -r osx-x64 --self-contained true -p:Version=${{ github.ref_name }} -o ./cli-publish
 
       - uses: actions/upload-artifact@v4
         with:
-          name: DrumMidiRemapper-macOS-${{ env.VERSION }}
+          name: DrumMidiRemapper-macOS-${{ github.ref_name }}
           path: |
-            DrumMidiRemapper-${{ env.VERSION }}.dmg
+            DrumMidiRemapper-${{ github.ref_name }}.dmg
             ./cli-publish/**
 
   build-linux:
-    name: Build Linux CLI only (${{ env.VERSION }})
+    name: Build Linux CLI only (${{ github.ref_name }})
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -112,9 +109,9 @@ jobs:
         run: dotnet restore
 
       - name: Build CLI Linux
-        run: dotnet publish ./src/CLI/CLI.csproj -c Release -r linux-x64 --self-contained true -p:Version=${{ env.VERSION }} -o ./cli-publish
+        run: dotnet publish ./src/CLI/CLI.csproj -c Release -r linux-x64 --self-contained true -p:Version=${{ github.ref_name }} -o ./cli-publish
 
       - uses: actions/upload-artifact@v4
         with:
-          name: DrumMidiRemapper-LinuxCLI-${{ env.VERSION }}
+          name: DrumMidiRemapper-LinuxCLI-${{ github.ref_name }}
           path: ./cli-publish/**
