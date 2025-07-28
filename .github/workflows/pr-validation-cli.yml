@@ -17,7 +17,7 @@ jobs:
           dotnet-version: '9.0.x'
 
       - name: Restore CLI only
-        run: dotnet restore ./src/CLI/CLI.csproj --framework net9.0
+        run: dotnet restore ./src/CLI/CLI.csproj
 
       - name: Build CLI only
         run: dotnet build ./src/CLI/CLI.csproj --framework net9.0 --configuration Release --no-restore
