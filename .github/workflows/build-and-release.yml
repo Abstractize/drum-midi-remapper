@@ -80,9 +80,8 @@ jobs:
         with:
           dotnet-version: 9.0.x
 
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: 'latest'
+      - name: Update XCode
+        run: sudo softwareupdate --install "Xcode-16.4"
 
       - name: Install MAUI workloads
         run: |
@@ -119,23 +118,23 @@ jobs:
             DrumMidiRemapper-${{ needs.version.outputs.version }}.dmg
             ./cli-publish/**
 
-  build-linux:
-    name: Build Linux CLI only
-    runs-on: ubuntu-latest
-    needs: version
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 9.0.x
+  # build-linux:
+  #   name: Build Linux CLI only
+  #   runs-on: ubuntu-latest
+  #   needs: version
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-dotnet@v4
+  #       with:
+  #         dotnet-version: 9.0.x
 
-      - name: Restore dependencies
-        run: dotnet restore ./src/CLI/CLI.csproj
+  #     - name: Restore dependencies
+  #       run: dotnet restore ./src/CLI/CLI.csproj
 
-      - name: Build CLI Linux
-        run: dotnet publish ./src/CLI/CLI.csproj -c Release --framework net9.0 --self-contained true -p:Version=${{ needs.version.outputs.version }} -o ./cli-publish --no-restore
+  #     - name: Build CLI Linux
+  #       run: dotnet publish ./src/CLI/CLI.csproj -c Release --framework net9.0 --self-contained true -p:Version=${{ needs.version.outputs.version }} -o ./cli-publish --no-restore
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: DrumMidiRemapper-LinuxCLI-${{ needs.version.outputs.version }}
-          path: ./cli-publish/**
+  #     - uses: actions/upload-artifact@v4
+  #       with:
+  #         name: DrumMidiRemapper-LinuxCLI-${{ needs.version.outputs.version }}
+  #         path: ./cli-publish/**
