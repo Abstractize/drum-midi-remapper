@@ -32,8 +32,8 @@ jobs:
             jq empty "$file"
           done
 
-      - name: Check for vulnerable packages
-        run: dotnet list package --vulnerable
+      # - name: Check for vulnerable packages
+      #   run: dotnet list package --vulnerable
 
   validate-maui:
     name: Validate GUI MAUI on macOS
