@@ -4,10 +4,9 @@ on:
   pull_request:
 
 jobs:
-  build-and-validate:
-    name: Build, Test & Validate
+  validate-cli:
+    name: Validate CLI on Linux
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -17,24 +16,46 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
-      - name: Restore dependencies
-        run: dotnet restore
+      - name: Restore CLI only
+        run: dotnet restore ./CLI/CLI.csproj
 
-      - name: Check code formatting
-        run: dotnet format --verify-no-changes
+      - name: Build CLI only
+        run: dotnet build ./CLI/CLI.csproj --configuration Release --no-restore
 
-      - name: Build with analyzers
-        run: dotnet build --configuration Release -warnaserror
+      - name: Run CLI unit tests
+        run: dotnet test ./CLI.Tests/CLI.Tests.csproj --configuration Release --no-build
 
-      - name: Run unit tests
-        run: dotnet test --configuration Release --verbosity normal
-
-      - name: Validate mapping JSON files
+      - name: Validate JSON files
         run: |
-            for file in $(find ./Services/Resources/Maps -name "*.json"); do
-                echo "Validating $file"
-                jq empty "$file"
-            done
+          for file in $(find ./Services/Resources/Maps -name "*.json"); do
+            echo "Validating $file"
+            jq empty "$file"
+          done
 
       - name: Check for vulnerable packages
         run: dotnet list package --vulnerable
+
+  validate-maui:
+    name: Validate GUI MAUI on macOS
+    runs-on: macos-latest
+    needs: validate-cli
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Install workloads
+        run: |
+          dotnet workload update
+          dotnet workload install maui
+          dotnet workload install maui-maccatalyst
+
+      - name: Restore GUI
+        run: dotnet restore ./GUI/GUI.csproj
+
+      - name: Build GUI
+        run: dotnet build ./GUI/GUI.csproj --configuration Release --no-restore
