@@ -17,10 +17,10 @@ jobs:
           dotnet-version: '9.0.x'
 
       - name: Restore CLI only
-        run: dotnet restore ./src/CLI/CLI.csproj
+        run: dotnet restore ./src/CLI/CLI.csproj --framework net9.0
 
       - name: Build CLI only
-        run: dotnet build ./src/CLI/CLI.csproj --configuration Release --no-restore
+        run: dotnet build ./src/CLI/CLI.csproj --framework net9.0 --configuration Release --no-restore
 
       # - name: Run CLI unit tests
       #   run: dotnet test ./src/CLI.Tests/CLI.Tests.csproj --configuration Release --no-build
