@@ -32,16 +32,19 @@ public class MidiMapManagerTest
 
         var manager = new MidiMapManager(mockMapLoader.Object, mockMidiFileService.Object);
 
+        // Create a dummy stream for the MIDI file
+        using var midiStream = new System.IO.MemoryStream();
+
         // Act
         await manager.RemapMidi(
             variables.SourceMapType,
             variables.TargetMapType,
-            variables.MidiPath
+            midiStream
         );
 
         // Assert
         mockMapLoader.Verify(m => m.LoadAsync(SOURCE), Times.Once);
         mockMapLoader.Verify(m => m.LoadAsync(TARGET), Times.Once);
-        mockMidiFileService.Verify(m => m.RemapAsync(sourceMap, targetMap, "test.mid"), Times.Once);
+        mockMidiFileService.Verify(m => m.RemapAsync(sourceMap, targetMap, midiStream), Times.Once);
     }
 }

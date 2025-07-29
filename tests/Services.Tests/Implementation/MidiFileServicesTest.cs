@@ -14,10 +14,10 @@ namespace Services.Tests.Implementation
             var service = new MidiFileServiceDryWetMidi();
             var sourceMap = new DrumMap();
             var targetMap = new DrumMap();
-            string fakePath = "nonexistent.mid";
+            using var fakeStream = new MemoryStream();
 
             var ex = await Assert.ThrowsAsync<FileNotFoundException>(() =>
-                service.RemapAsync(sourceMap, targetMap, fakePath));
+                service.RemapAsync(sourceMap, targetMap, fakeStream));
             Assert.Contains("MIDI file not found", ex.Message);
         }
 
@@ -38,7 +38,10 @@ namespace Services.Tests.Implementation
             try
             {
                 // Act
-                await service.RemapAsync(sourceMap, targetMap, midiPath);
+                using (var midiStream = File.OpenRead(midiPath))
+                {
+                    await service.RemapAsync(sourceMap, targetMap, midiStream);
+                }
 
                 // Assert
                 string outputPath = Path.Combine(Directory.GetCurrentDirectory(), Path.GetFileName(midiPath));

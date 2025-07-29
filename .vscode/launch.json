@@ -19,7 +19,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build GUI (Mac Catalyst)",
-            "program": "${workspaceFolder}/src/GUI/bin/Debug/net8.0-maccatalyst/maccatalyst-arm64/GUI.app/Contents/MacOS/GUI",
+            "program": "${workspaceFolder}/src/GUI/bin/Debug/net8.0-maccatalyst/maccatalyst-arm64/DrumMidiRemapper.app/Contents/MacOS/DrumMidiRemapper",
             "cwd": "${workspaceFolder}/src/GUI",
             "internalConsoleOptions": "openOnSessionStart",
             "env": {
