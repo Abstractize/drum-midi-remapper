@@ -1,4 +1,4 @@
-name: Build Drum Midi Remapper (Windows/macOS/Linux)
+name: Build Drum Midi Remapper (Windows/macOS)
 
 on:
   push:
@@ -6,6 +6,9 @@ on:
       - 'v*.*.*'
   pull_request:
     branches: [ main ]
+
+permissions:
+  contents: write
 
 jobs:
   version:
@@ -131,24 +134,34 @@ jobs:
           path: |
             DrumMidiRemapper-${{ needs.version.outputs.version }}.dmg
             ./cli-publish/**
+  release:
+    name: 🚀 Publish GitHub Release
+    runs-on: ubuntu-latest
+    needs: [build-windows, build-macos, version]
+    steps:
+      - uses: actions/checkout@v4
 
-  # build-linux:
-  #   name: Build Linux CLI only
-  #   runs-on: ubuntu-latest
-  #   needs: version
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-dotnet@v4
-  #       with:
-  #         dotnet-version: 8.0.x
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
 
-  #     - name: Restore dependencies
-  #       run: dotnet restore ./src/CLI/CLI.csproj
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ needs.version.outputs.version }}
+          release_name: "Drum Midi Remapper v${{ needs.version.outputs.version }}"
+          draft: false
+          prerelease: false
 
-  #     - name: Build CLI Linux
-  #       run: dotnet publish ./src/CLI/CLI.csproj -c Release --framework net8.0 --self-contained true -p:Version=${{ needs.version.outputs.version }} -o ./cli-publish --no-restore
-
-  #     - uses: actions/upload-artifact@v4
-  #       with:
-  #         name: DrumMidiRemapper-LinuxCLI-${{ needs.version.outputs.version }}
-  #         path: ./cli-publish/**
+      - name: Upload Release Assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts
+          asset_name: "DrumMidiRemapper-${{ needs.version.outputs.version }}.zip"
+          asset_content_type: application/zip

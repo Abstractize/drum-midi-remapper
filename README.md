@@ -1,13 +1,49 @@
 # Drum MIDI Remapper
 
-A **.NET 8** cross-platform tool for remapping MIDI drum notes between different standards and custom mappings. Designed to help musicians and producers adapt MIDI drum tracks for compatibility with various drum kits, DAWs, and hardware.
+A cross-platform tool built with **.NET 8** for remapping MIDI drum notes between different standards and custom mappings. Designed for musicians and producers to adapt MIDI drum tracks for compatibility with various drum kits, DAWs, and hardware.
 
-![Build Status](https://img.shields.io/github/actions/workflow/status/Abstractize/drum-midi-remapper/ci.yml?branch=main)
+Includes both a CLI and a .NET MAUI GUI for easy drum MIDI remapping.
+
+![Build Status](https://img.shields.io/github/actions/workflow/status/Abstractize/drum-midi-remapper/build-and-release.yml?branch=main)
 ![License](https://img.shields.io/github/license/Abstractize/drum-midi-remapper)
 
 ---
 
+## Features
+
+- Remap MIDI drum notes using customizable JSON mapping files
+- Supports popular drum mapping standards (GuitarPro, StevenSlate, LogicPro, ProTools)
+- Batch processing of MIDI files via CLI
+- Modular architecture with Dependency Injection for extensibility
+- .NET MAUI cross-platform GUI with drag-and-drop interface
+- Export remapped MIDI files directly from the GUI
+- Compatible with Windows and macOS via MAUI
+- CLI supports Windows, macOS, and Linux
+- Powered by .NET 8
+
+---
+
+## Requirements
+
+- [.NET 8.0 SDK](https://dotnet.microsoft.com/download)
+- Windows, macOS, and Linux (CLI only)
+
+---
+
+## Download
+
+Pre-built binaries are available for Windows and macOS from the [Releases](https://github.com/Abstractize/drum-midi-remapper/releases) page.
+
+- **Windows:** Download the `.msi` installer and follow the prompts.
+- **macOS:** Download the `.dmg` file, open it, and drag the app to your Applications folder.
+
+No installation required on Windows other than running the installer. See the release notes for details.
+
+---
+
 ## Quick Start
+
+### CLI (Cross-platform)
 
 ```bash
 git clone https://github.com/Abstractize/drum-midi-remapper.git
@@ -16,28 +52,25 @@ dotnet build
 dotnet run --project src/CLI -- GuitarPro StevenSlate midis/test.mid
 ```
 
-- Replace `GuitarPro`, `StevenSlate`, and `midis/test.mid` with your desired mappings and MIDI file.
+### Windows (.NET MAUI GUI)
+
+```powershell
+dotnet build -f net8.0-windows10.0.19041.0
+dotnet run --project src/GUI -f net8.0-windows10.0.19041.0
+```
+
+### macOS (.NET MAUI GUI)
+
+```bash
+dotnet build -f net8.0-maccatalyst
+dotnet run --project src/GUI -f net8.0-maccatalyst
+```
+
+Replace `GuitarPro`, `StevenSlate`, and `midis/test.mid` with your desired mappings and MIDI file.
 
 ---
 
-## Requirements
-
-- [.NET 8.0 SDK or newer](https://dotnet.microsoft.com/download)
-- Compatible with Windows, macOS, and Linux
-
----
-
-## Features
-
-- Remap MIDI drum notes using customizable JSON mapping files  
-- Support for popular drum mapping standards (e.g., GuitarPro, StevenSlate, LogicPro, ProTools)  
-- Batch processing of MIDI files via CLI  
-- Cross-platform support powered by .NET 8
-- Modular architecture with Dependency Injection for easy extensibility
-
----
-
-## Usage
+## CLI Usage
 
 Run the tool with:
 
@@ -45,7 +78,7 @@ Run the tool with:
 dotnet run --project src/CLI -- <SourceMap> <TargetMap> <InputMidiFile>
 ```
 
-- `<SourceMap>` and `<TargetMap>`: Mapping names (see **Available Mappings** below)  
+- `<SourceMap>` and `<TargetMap>`: Mapping names (see **Available Mappings** below)
 - `<InputMidiFile>`: Path to the MIDI file to remap
 
 The `--project src/CLI` option specifies the CLI project.
@@ -58,12 +91,14 @@ Mappings are stored as JSON files in the **Services/Resources/Maps/** directory.
 
 Included mappings:
 
-- GuitarPro  
-- LogicPro  
-- ProTools  
+- GuitarPro
+- LogicPro
+- ProTools
 - StevenSlate
 
 You can also create custom mappings by adding JSON files to the directory.
+
+Feel free to add a new mapping by creating a JSON resource file and submitting a pull request.
 
 ---
 
@@ -90,7 +125,7 @@ Mapping files are JSON documents located in **Services/Resources/Maps/**. Edit o
 }
 ```
 
-- `"name"`: Identifier for the map  
+- `"name"`: Identifier for the map
 - Values correspond to MIDI note numbers
 
 > **Note:** MIDI note numbers follow the [General MIDI Percussion Key Map](https://www.midi.org/specifications-old/item/gm-level-1-sound-set). This project uses [DryWetMIDI](https://melanchall.github.io/drywetmidi/) for MIDI handling.
@@ -110,10 +145,18 @@ dotnet run --project src/CLI -- GuitarPro StevenSlate midis/test.mid
 
 ---
 
+## Screenshot
+
+![Drum MIDI Remapper UI](docs/screenshots/app-ui.png)
+
+The screenshot shows the Drum MIDI Remapper application's main form. Users can upload a MIDI file and select both the source and target drum mapping standards from dropdown menus. The interface provides an intuitive workflow for remapping drum notes, with clear options for file selection and mapping configuration.
+
+---
+
 ## Troubleshooting & FAQ
 
-- **Build errors:** Ensure .NET 8 SDK is installed and your environment is configured correctly.  
-- **Mapping not found:** Verify spelling and that JSON mapping files exist in **Services/Resources/Maps/**.  
+- **Build errors:** Ensure .NET 8 SDK is installed and your environment is configured correctly.
+- **Mapping not found:** Verify spelling and that JSON mapping files exist in **Services/Resources/Maps/**.
 - **MIDI file issues:** Confirm your input file is a valid MIDI file and accessible.
 
 ---
@@ -124,9 +167,9 @@ Contributions are welcome! Please open issues or submit pull requests.
 
 ### Adding a New Mapping
 
-1. Add a JSON mapping file to **Services/Resources/Maps/**  
-2. Follow the existing file format for your mapping  
-3. Update the `DrumMapType` enum in `Models/DrumMapType.cs` to include your new map  
+1. Add a JSON mapping file to **Services/Resources/Maps/**
+2. Follow the existing file format for your mapping
+3. Update the `DrumMapType` enum in `Models/DrumMapType.cs` to include your new map
 4. Submit a pull request
 
 ---
@@ -140,3 +183,4 @@ Contributions are welcome! Please open issues or submit pull requests.
 ## License
 
 MIT License
+
