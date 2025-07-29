@@ -45,8 +45,13 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Managers\Managers.csproj" />
 		<ProjectReference Include="..\Services\Services.csproj">
-			<ExcludeAssets>runtime</ExcludeAssets>
+			<ExcludeAssets>runtime;native;build;contentfiles</ExcludeAssets>
 		</ProjectReference>
 	</ItemGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-maccatalyst'">
+		<UseInterpreter>true</UseInterpreter>
+		<MtouchLinkMode>None</MtouchLinkMode>
+	</PropertyGroup>
 
 </Project>
