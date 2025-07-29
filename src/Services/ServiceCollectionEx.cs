@@ -8,7 +8,11 @@ public static class ServiceCollectionEx
 {
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddSingleton<IMidiFileService, MidiFileService>();
+#if MACCATALYST
+    services.AddSingleton<IMidiFileService, MidiFileServiceCoreMidi>();
+#else
+        services.AddSingleton<IMidiFileService, MidiFileServiceDryWetMidi>();
+#endif
         services.AddSingleton<IMapLoaderService, MapLoaderService>();
 
         return services;

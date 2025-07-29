@@ -1,3 +1,5 @@
+#if !MACCATALYST
+
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Models;
@@ -50,3 +52,5 @@ public static class MidiFileExtensions
         }
     }
 }
+
+#endif

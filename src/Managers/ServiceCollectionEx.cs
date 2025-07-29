@@ -9,7 +9,6 @@ public static class ServiceCollectionEx
     public static IServiceCollection AddManagers(this IServiceCollection services)
     {
         services.AddTransient<IMidiMapManager, MidiMapManager>();
-        services.AddTransient<ICliArgumentManager, CliArgumentManager>();
 
         return services;
     }

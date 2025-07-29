@@ -1,0 +1,76 @@
+﻿<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GUI.App">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <!-- Colors -->
+            <Color x:Key="Primary">#6366f1</Color>
+            <!-- Indigo 500 -->
+            <Color x:Key="PrimaryDark">#4f46e5</Color>
+            <Color x:Key="Background">#f8f9fa</Color>
+            <!-- Light gray -->
+            <Color x:Key="CardBackground">#ffffff</Color>
+            <!-- White card background -->
+            <Color x:Key="InputBackground">#f9fafb</Color>
+            <!-- Input bg -->
+            <Color x:Key="TextColor">#212529</Color>
+            <!-- Dark text -->
+
+            <!-- Button Style -->
+            <Style TargetType="Button">
+                <Setter Property="BackgroundColor"
+                        Value="{DynamicResource Primary}"/>
+                <Setter Property="TextColor"
+                        Value="White"/>
+                <Setter Property="FontAttributes"
+                        Value="Bold"/>
+                <Setter Property="CornerRadius"
+                        Value="8"/>
+                <Setter Property="HeightRequest"
+                        Value="44"/>
+                <Setter Property="Margin"
+                        Value="0,10"/>
+            </Style>
+
+            <!-- Label Style for inputs -->
+            <Style TargetType="Label">
+                <Setter Property="FontAttributes"
+                        Value="Bold"/>
+                <Setter Property="TextColor"
+                        Value="{DynamicResource TextColor}"/>
+            </Style>
+
+            <!-- Picker Style -->
+            <Style TargetType="Picker">
+                <Setter Property="BackgroundColor"
+                        Value="{DynamicResource InputBackground}"/>
+                <Setter Property="TextColor"
+                        Value="{DynamicResource TextColor}"/>
+                <Setter Property="HeightRequest"
+                        Value="44"/>
+                <Setter Property="Margin"
+                        Value="0,0,0,12"/>
+            </Style>
+
+            <!-- VerticalStackLayout for container card -->
+            <Style TargetType="VerticalStackLayout"
+                   x:Key="CardContainer">
+                <Setter Property="Padding"
+                        Value="24"/>
+                <Setter Property="Spacing"
+                        Value="20"/>
+                <Setter Property="BackgroundColor"
+                        Value="{DynamicResource CardBackground}"/>
+                <Setter Property="HorizontalOptions"
+                        Value="Center"/>
+                <Setter Property="WidthRequest"
+                        Value="400"/>
+                <Setter Property="Margin"
+                        Value="60,60,60,60"/>
+                <Setter Property="VerticalOptions"
+                        Value="Center"/>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

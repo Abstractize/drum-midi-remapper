@@ -1,6 +1,6 @@
 namespace Models;
 
-public enum DrumMapType
+public enum DrumMapTypes
 {
     StevenSlate,
     GuitarPro,

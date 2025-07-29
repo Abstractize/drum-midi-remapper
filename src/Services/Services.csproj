@@ -1,22 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <!-- Multitarget explícito -->
+    <TargetFrameworks>net8.0;net8.0-maccatalyst</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <!-- Referencias de proyectos comunes -->
   <ItemGroup>
     <ProjectReference Include="..\Models\Models.csproj" />
   </ItemGroup>
 
+  <!-- Paquete siempre incluido -->
   <ItemGroup>
-    <PackageReference Include="Melanchall.DryWetMidi" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
   </ItemGroup>
 
+  <!-- Excluir DryWetMidi solo en MacCatalyst -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' and '$(IsMacCatalyst)' != 'true' ">
+    <PackageReference Include="Melanchall.DryWetMidi" Version="8.0.1" />
+  </ItemGroup>
+
+  <!-- Recursos JSON -->
   <ItemGroup>
     <EmbeddedResource Include="Resources/Maps/*.json" />
   </ItemGroup>
-  
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
 
 </Project>

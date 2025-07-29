@@ -4,5 +4,6 @@ namespace Managers.Contracts;
 
 public interface IMidiMapManager
 {
-    Task RemapMidi(RemapVariables variables);
+    Task<Stream> RemapMidi(string sourceMapArg, string targetMapArg, Stream midiStream);
+    Task<string> RemapMidi(string sourceMapArg, string targetMapArg, string midiPath);
 }

@@ -1,53 +1,154 @@
-name: Build and Publish Artifacts
+name: Build Drum Midi Remapper (Windows/macOS/Linux)
 
 on:
   push:
-    branches: [ main ]
     tags:
-      - 'v*'
-
-permissions:
-  contents: write
+      - 'v*.*.*'
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  build:
+  version:
+    name: 🏷️ Generate Version
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        runtime: [win-x64, osx-x64, osx-arm64, linux-x64]
-
+    outputs:
+      version: ${{ steps.set-version.outputs.version }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup .NET 9 SDK
-        uses: actions/setup-dotnet@v3
+      - uses: actions/checkout@v4
         with:
-          dotnet-version: '9.0.x'
+          fetch-depth: 0
+
+      - name: 🏷️ Generate semantic version from Git tag
+        id: set-version
+        run: |
+          TAG=$(git describe --tags --abbrev=0)
+          VERSION_BASE=${TAG#v}
+          COUNT=$(git rev-list --count ${TAG}..HEAD)
+          VERSION="$VERSION_BASE.$COUNT"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "📦 Using version: $VERSION"
+
+  build-windows:
+    name: Build Windows Desktop + CLI
+    runs-on: windows-latest
+    needs: version
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install MAUI workloads
+        run: |
+          dotnet workload update
+          dotnet workload install maui
+          dotnet workload install maui-windows
 
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Publish single-file executable for ${{ matrix.runtime }}
+      - name: Build Windows MSIX
         run: |
-          dotnet publish src/CLI \
-            -c Release \
-            -r ${{ matrix.runtime }} \
-            --self-contained true \
-            /p:PublishSingleFile=true \
-            /p:IncludeAllContentForSelfExtract=true \
-            -o ./publish/${{ matrix.runtime }}
+          dotnet publish ./src/GUI/GUI.csproj -f net8.0-windows10.0.19041.0 -c Release `
+            -p:Version=${{ needs.version.outputs.version }} `
+            -p:WindowsPackageType=MSIX `
+            -p:GenerateAppxPackageOnBuild=true
 
-      - name: Upload artifact for ${{ matrix.runtime }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: DrumMidiRemapper-${{ matrix.runtime }}
-          path: ./publish/${{ matrix.runtime }}
+      - name: Build CLI
+        run: dotnet publish ./src/CLI/CLI.csproj -c Release -r win-x64 --self-contained true -p:Version=${{ needs.version.outputs.version }} -o ./cli-publish
 
-      - name: Upload Release Asset
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v2
+      - name: Package Windows MSIX
+        shell: pwsh
+        run: |
+          $msix = Get-ChildItem -Path ./src/GUI/bin/Release/** -Recurse -Include "*.msix" | Select-Object -First 1
+          Compress-Archive -Path $msix.FullName -DestinationPath DrumMidiRemapper-Windows-${{ needs.version.outputs.version }}.zip
+
+      - uses: actions/upload-artifact@v4
         with:
-          files: ./publish/${{ matrix.runtime }}/CLI*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: DrumMidiRemapper-Windows-${{ needs.version.outputs.version }}
+          path: |
+            DrumMidiRemapper-Windows-${{ needs.version.outputs.version }}.zip
+            ./cli-publish/**
+
+  build-macos:
+    name: Build macOS Desktop + CLI
+    runs-on: macos-latest
+    needs: version
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 'latest'
+
+      - name: Install MAUI workloads
+        run: |
+          dotnet workload update
+          dotnet workload install maui
+          dotnet workload install maui-maccatalyst
+
+      - name: Restore dependencies
+        run: dotnet workload restore
+
+      - name: Build MacCatalyst App
+        run: dotnet publish ./src/GUI/GUI.csproj -f net8.0-maccatalyst -c Release -p:Version=${{ needs.version.outputs.version }}
+
+      - name: Create DMG Installer
+        run: |
+          brew install create-dmg
+          APP_PATH=$(find ./src/GUI/bin/Release/net8.0-maccatalyst -name "*.app" | head -n 1)
+          echo "Found app: $APP_PATH"
+
+          if [[ "$APP_PATH" == *" "* ]]; then
+            APP_DIR=$(dirname "$APP_PATH")
+            APP_NEW="$APP_DIR/DrumMidiRemapper.app"
+            echo "Renaming app to: $APP_NEW"
+            mv "$APP_PATH" "$APP_NEW"
+            APP_PATH="$APP_NEW"
+          fi
+
+          create-dmg \
+            --volname "DrumMidiRemapper" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --no-internet-enable \
+            --skip-jenkins \
+            --icon-size 100 \
+            --icon "$APP_PATH" 175 190 \
+            --app-drop-link 425 190 \
+            "DrumMidiRemapper-${{ needs.version.outputs.version }}.dmg" \
+            "$APP_PATH"
+
+      - name: Build CLI
+        run: dotnet publish ./src/CLI/CLI.csproj -c Release -r osx-x64 --self-contained true -p:Version=${{ needs.version.outputs.version }} -o ./cli-publish
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DrumMidiRemapper-macOS-${{ needs.version.outputs.version }}
+          path: |
+            DrumMidiRemapper-${{ needs.version.outputs.version }}.dmg
+            ./cli-publish/**
+
+  # build-linux:
+  #   name: Build Linux CLI only
+  #   runs-on: ubuntu-latest
+  #   needs: version
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-dotnet@v4
+  #       with:
+  #         dotnet-version: 8.0.x
+
+  #     - name: Restore dependencies
+  #       run: dotnet restore ./src/CLI/CLI.csproj
+
+  #     - name: Build CLI Linux
+  #       run: dotnet publish ./src/CLI/CLI.csproj -c Release --framework net8.0 --self-contained true -p:Version=${{ needs.version.outputs.version }} -o ./cli-publish --no-restore
+
+  #     - uses: actions/upload-artifact@v4
+  #       with:
+  #         name: DrumMidiRemapper-LinuxCLI-${{ needs.version.outputs.version }}
+  #         path: ./cli-publish/**

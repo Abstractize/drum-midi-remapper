@@ -1,7 +1,7 @@
-using Managers.Contracts;
+using CLI.Managers.Contracts;
 using Models;
 
-namespace Managers.Implementations;
+namespace CLI.Managers.Implementations;
 
 public class CliArgumentManager : ICliArgumentManager
 {
@@ -23,22 +23,10 @@ public class CliArgumentManager : ICliArgumentManager
         var targetArg = args[1];
         var midiPath = args[2];
 
-        if (!Enum.TryParse<DrumMapType>(sourceArg, true, out var sourceMapType))
-        {
-            PrintAvailableMapTypes();
-            throw new ArgumentException($"Invalid source map: '{sourceArg}'");
-        }
-
-        if (!Enum.TryParse<DrumMapType>(targetArg, true, out var targetMapType))
-        {
-            PrintAvailableMapTypes();
-            throw new ArgumentException($"Invalid target map: '{targetArg}'");
-        }
-
         return Task.Run(() => new RemapVariables
         {
-            SourceMapType = sourceMapType,
-            TargetMapType = targetMapType,
+            SourceMapType = sourceArg,
+            TargetMapType = targetArg,
             MidiPath = midiPath
         });
     }
@@ -46,7 +34,7 @@ public class CliArgumentManager : ICliArgumentManager
     private static void PrintAvailableMapTypes()
     {
         Console.WriteLine(AVAILABLE_MAPS);
-        foreach (string name in Enum.GetNames<DrumMapType>())
+        foreach (string name in Enum.GetNames<DrumMapTypes>())
         {
             Console.WriteLine($"- {name}");
         }

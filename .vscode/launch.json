@@ -1,29 +1,30 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach"
-        },
-        {
-            "name": ".NET Core Launch (console)",
+            "name": "Launch CLI",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/CLI/bin/Debug/net9.0/CLI.dll",
-            "args": [],
+            "program": "${workspaceFolder}/src/CLI/bin/Debug/net8.0/CLI",
             "cwd": "${workspaceFolder}/src/CLI",
-            "console": "internalConsole",
-            "stopAtEntry": false
+            "args": [
+                "GuitarPro",
+                "StevenSlate",
+                "${workspaceFolder}/midis/test.mid"
+            ],
+            "console": "integratedTerminal"
         },
         {
-            "name": ".NET Core Attach",
+            "name": "Launch GUI (Mac Catalyst)",
             "type": "coreclr",
-            "request": "attach"
+            "request": "launch",
+            "preLaunchTask": "build GUI (Mac Catalyst)",
+            "program": "${workspaceFolder}/src/GUI/bin/Debug/net8.0-maccatalyst/maccatalyst-arm64/DrumMidiRemapper.app/Contents/MacOS/DrumMidiRemapper",
+            "cwd": "${workspaceFolder}/src/GUI",
+            "internalConsoleOptions": "openOnSessionStart",
+            "env": {
+                "DOTNET_ROOT": "/usr/local/share/dotnet"
+            }
         }
     ]
 }

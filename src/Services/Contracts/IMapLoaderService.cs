@@ -4,5 +4,5 @@ namespace Services.Contracts;
 
 public interface IMapLoaderService
 {
-    abstract Task<DrumMap> LoadAsync(DrumMapType type);
+    abstract Task<DrumMap> LoadAsync(DrumMapTypes type);
 }
