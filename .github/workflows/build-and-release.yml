@@ -1,4 +1,4 @@
-name: Build Drum Midi Remapper (Windows/macOS/Linux)
+name: Build Drum Midi Remapper (Windows/macOS)
 
 on:
   push:
@@ -6,6 +6,9 @@ on:
       - 'v*.*.*'
   pull_request:
     branches: [ main ]
+
+permissions:
+  contents: write
 
 jobs:
   version:
@@ -131,27 +134,6 @@ jobs:
           path: |
             DrumMidiRemapper-${{ needs.version.outputs.version }}.dmg
             ./cli-publish/**
-
-  # build-linux:
-  #   name: Build Linux CLI only
-  #   runs-on: ubuntu-latest
-  #   needs: version
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-dotnet@v4
-  #       with:
-  #         dotnet-version: 8.0.x
-
-  #     - name: Restore dependencies
-  #       run: dotnet restore ./src/CLI/CLI.csproj
-
-  #     - name: Build CLI Linux
-  #       run: dotnet publish ./src/CLI/CLI.csproj -c Release --framework net8.0 --self-contained true -p:Version=${{ needs.version.outputs.version }} -o ./cli-publish --no-restore
-
-  #     - uses: actions/upload-artifact@v4
-  #       with:
-  #         name: DrumMidiRemapper-LinuxCLI-${{ needs.version.outputs.version }}
-  #         path: ./cli-publish/**
   release:
     name: 🚀 Publish GitHub Release
     runs-on: ubuntu-latest
