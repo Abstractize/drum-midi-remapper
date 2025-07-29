@@ -147,6 +147,7 @@ jobs:
           path: ./artifacts
 
       - name: Create GitHub Release
+        id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -156,12 +157,22 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Upload Release Assets
+      - name: Upload Windows Artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts
-          asset_name: "DrumMidiRemapper-${{ needs.version.outputs.version }}.zip"
+          asset_path: ./artifacts/DrumMidiRemapper-Windows-${{ needs.version.outputs.version }}/DrumMidiRemapper-Windows-${{ needs.version.outputs.version }}.zip
+          asset_name: DrumMidiRemapper-Windows-${{ needs.version.outputs.version }}.zip
           asset_content_type: application/zip
+
+      - name: Upload macOS Artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/DrumMidiRemapper-macOS-${{ needs.version.outputs.version }}/DrumMidiRemapper-${{ needs.version.outputs.version }}.dmg
+          asset_name: DrumMidiRemapper-macOS-${{ needs.version.outputs.version }}.dmg
+          asset_content_type: application/x-apple-diskimage

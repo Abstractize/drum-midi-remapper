@@ -34,7 +34,7 @@ Includes both a CLI and a .NET MAUI GUI for easy drum MIDI remapping.
 
 Pre-built binaries are available for Windows and macOS from the [Releases](https://github.com/Abstractize/drum-midi-remapper/releases) page.
 
-- **Windows:** Download the `.msi` installer and follow the prompts.
+- **Windows:** Download the `.zip` file containing the `.msix` installer, extract it, and double-click the `.msix` to install.
 - **macOS:** Download the `.dmg` file, open it, and drag the app to your Applications folder.
 
 No installation required on Windows other than running the installer. See the release notes for details.
