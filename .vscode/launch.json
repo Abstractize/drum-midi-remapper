@@ -5,7 +5,7 @@
             "name": "Launch CLI",
             "type": "coreclr",
             "request": "launch",
-            "program": "${workspaceFolder}/src/CLI/bin/Debug/net9.0/CLI",
+            "program": "${workspaceFolder}/src/CLI/bin/Debug/net8.0/CLI",
             "cwd": "${workspaceFolder}/src/CLI",
             "args": [
                 "GuitarPro",
@@ -19,7 +19,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build GUI (Mac Catalyst)",
-            "program": "${workspaceFolder}/src/GUI/bin/Debug/net9.0-maccatalyst/maccatalyst-arm64/GUI.app/Contents/MacOS/GUI",
+            "program": "${workspaceFolder}/src/GUI/bin/Debug/net8.0-maccatalyst/maccatalyst-arm64/GUI.app/Contents/MacOS/GUI",
             "cwd": "${workspaceFolder}/src/GUI",
             "internalConsoleOptions": "openOnSessionStart",
             "env": {

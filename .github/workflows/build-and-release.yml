@@ -49,7 +49,7 @@ jobs:
 
       - name: Build Windows MSIX
         run: |
-          dotnet publish ./src/GUI/GUI.csproj -f net9.0-windows10.0.19041.0 -c Release `
+          dotnet publish ./src/GUI/GUI.csproj -f net8.0-windows10.0.19041.0 -c Release `
             -p:Version=${{ needs.version.outputs.version }} `
             -p:WindowsPackageType=MSIX `
             -p:GenerateAppxPackageOnBuild=true
@@ -94,12 +94,12 @@ jobs:
         run: dotnet workload restore
 
       - name: Build MacCatalyst App
-        run: dotnet publish ./src/GUI/GUI.csproj -f net9.0-maccatalyst -c Release -p:Version=${{ needs.version.outputs.version }}
+        run: dotnet publish ./src/GUI/GUI.csproj -f net8.0-maccatalyst -c Release -p:Version=${{ needs.version.outputs.version }}
 
       - name: Create DMG Installer
         run: |
           brew install create-dmg
-          APP_PATH=$(find ./src/GUI/bin/Release/net9.0-maccatalyst/maccatalyst/ -name "*.app" | head -n 1)
+          APP_PATH=$(find ./src/GUI/bin/Release/net8.0-maccatalyst/maccatalyst/ -name "*.app" | head -n 1)
           create-dmg \
             --volname "Drum Midi Remapper" \
             --window-pos 200 120 \
@@ -133,7 +133,7 @@ jobs:
   #       run: dotnet restore ./src/CLI/CLI.csproj
 
   #     - name: Build CLI Linux
-  #       run: dotnet publish ./src/CLI/CLI.csproj -c Release --framework net9.0 --self-contained true -p:Version=${{ needs.version.outputs.version }} -o ./cli-publish --no-restore
+  #       run: dotnet publish ./src/CLI/CLI.csproj -c Release --framework net8.0 --self-contained true -p:Version=${{ needs.version.outputs.version }} -o ./cli-publish --no-restore
 
   #     - uses: actions/upload-artifact@v4
   #       with:

@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks Condition="'$(IsMacCatalyst)' == 'true'">net9.0-maccatalyst</TargetFrameworks>
-    <TargetFrameworks Condition="'$(IsMacCatalyst)' != 'true'">net9.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(IsMacCatalyst)' == 'true'">net8.0-maccatalyst</TargetFrameworks>
+    <TargetFrameworks Condition="'$(IsMacCatalyst)' != 'true'">net8.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -15,7 +15,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' != 'net9.0-maccatalyst' ">
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net8.0-maccatalyst' ">
     <PackageReference Include="Melanchall.DryWetMidi" Version="8.0.1" />
   </ItemGroup>
 

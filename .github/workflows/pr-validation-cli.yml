@@ -20,7 +20,7 @@ jobs:
         run: dotnet restore ./src/CLI/CLI.csproj
 
       - name: Build CLI only
-        run: dotnet build ./src/CLI/CLI.csproj --framework net9.0 --configuration Release --no-restore
+        run: dotnet build ./src/CLI/CLI.csproj --framework net8.0 --configuration Release --no-restore
 
       # - name: Run CLI unit tests
       #   run: dotnet test ./src/CLI.Tests/CLI.Tests.csproj --configuration Release --no-build

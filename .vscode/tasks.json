@@ -9,7 +9,7 @@
                 "build",
                 "${workspaceFolder}/src/GUI/GUI.csproj",
                 "-f",
-                "net9.0-maccatalyst"
+                "net8.0-maccatalyst"
             ],
             "problemMatcher": "$msCompile"
         }
