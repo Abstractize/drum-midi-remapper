@@ -100,14 +100,25 @@ jobs:
         run: |
           brew install create-dmg
           APP_PATH=$(find ./src/GUI/bin/Release/net8.0-maccatalyst -name "*.app" | head -n 1)
+          echo "Found app: $APP_PATH"
+
+          if [[ "$APP_PATH" == *" "* ]]; then
+            APP_DIR=$(dirname "$APP_PATH")
+            APP_NEW="$APP_DIR/DrumMidiRemapper.app"
+            echo "Renaming app to: $APP_NEW"
+            mv "$APP_PATH" "$APP_NEW"
+            APP_PATH="$APP_NEW"
+          fi
+
           create-dmg \
-            --volname "Drum Midi Remapper" \
+            --volname 'Drum Midi Remapper' \
             --window-pos 200 120 \
             --window-size 600 400 \
             --icon-size 100 \
             --icon "$APP_PATH" 175 190 \
             --app-drop-link 425 190 \
-            "DrumMidiRemapper-${{ needs.version.outputs.version }}.dmg" "$APP_PATH"
+            "DrumMidiRemapper-${{ needs.version.outputs.version }}.dmg" \
+            "$APP_PATH"
 
       - name: Build CLI
         run: dotnet publish ./src/CLI/CLI.csproj -c Release -r osx-x64 --self-contained true -p:Version=${{ needs.version.outputs.version }} -o ./cli-publish
