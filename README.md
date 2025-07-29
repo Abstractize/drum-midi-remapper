@@ -1,6 +1,6 @@
 # Drum MIDI Remapper
 
-A **.NET 9** cross-platform tool for remapping MIDI drum notes between different standards and custom mappings. Designed to help musicians and producers adapt MIDI drum tracks for compatibility with various drum kits, DAWs, and hardware.
+A **.NET 8** cross-platform tool for remapping MIDI drum notes between different standards and custom mappings. Designed to help musicians and producers adapt MIDI drum tracks for compatibility with various drum kits, DAWs, and hardware.
 
 ![Build Status](https://img.shields.io/github/actions/workflow/status/Abstractize/drum-midi-remapper/ci.yml?branch=main)
 ![License](https://img.shields.io/github/license/Abstractize/drum-midi-remapper)
@@ -22,7 +22,7 @@ dotnet run --project src/CLI -- GuitarPro StevenSlate midis/test.mid
 
 ## Requirements
 
-- [.NET 9.0 SDK or newer](https://dotnet.microsoft.com/download)
+- [.NET 8.0 SDK or newer](https://dotnet.microsoft.com/download)
 - Compatible with Windows, macOS, and Linux
 
 ---
@@ -32,7 +32,7 @@ dotnet run --project src/CLI -- GuitarPro StevenSlate midis/test.mid
 - Remap MIDI drum notes using customizable JSON mapping files  
 - Support for popular drum mapping standards (e.g., GuitarPro, StevenSlate, LogicPro, ProTools)  
 - Batch processing of MIDI files via CLI  
-- Cross-platform support powered by .NET 9  
+- Cross-platform support powered by .NET 8
 - Modular architecture with Dependency Injection for easy extensibility
 
 ---
@@ -112,7 +112,7 @@ dotnet run --project src/CLI -- GuitarPro StevenSlate midis/test.mid
 
 ## Troubleshooting & FAQ
 
-- **Build errors:** Ensure .NET 9 SDK is installed and your environment is configured correctly.  
+- **Build errors:** Ensure .NET 8 SDK is installed and your environment is configured correctly.  
 - **Mapping not found:** Verify spelling and that JSON mapping files exist in **Services/Resources/Maps/**.  
 - **MIDI file issues:** Confirm your input file is a valid MIDI file and accessible.
 
