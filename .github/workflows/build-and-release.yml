@@ -111,9 +111,11 @@ jobs:
           fi
 
           create-dmg \
-            --volname 'Drum Midi Remapper' \
+            --volname "DrumMidiRemapper" \
             --window-pos 200 120 \
             --window-size 600 400 \
+            --no-internet-enable \
+            --skip-jenkins \
             --icon-size 100 \
             --icon "$APP_PATH" 175 190 \
             --app-drop-link 425 190 \
